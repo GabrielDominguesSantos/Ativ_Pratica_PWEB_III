@@ -1,6 +1,6 @@
-<h1>Produtos</h1>
+<h1>Produtos — <%= categoria.nome %></h1>
 
-<a href="/produtos/novo">Novo produto</a>
+<a href="/produtos">Todos os produtos</a>
 |
 <a href="/categorias">Ver categorias</a>
 
@@ -9,7 +9,7 @@
 <label>Filtrar por categoria:</label>
 <select id="filtroCategoria">
     <% categorias.forEach(c => { %>
-        <option value="<%= c.id %>"><%= c.nome %></option>
+        <option value="<%= c.id %>" <%= String(c.id) === String(categoria.id) ? 'selected' : '' %>><%= c.nome %></option>
     <% }) %>
 </select>
 <button type="button" onclick="filtrar()">Filtrar</button>
@@ -58,3 +58,7 @@ function filtrar() {
     <% }) %>
 
 </table>
+
+<% if (produtos.length === 0) { %>
+    <p>Nenhum produto nesta categoria.</p>
+<% } %>

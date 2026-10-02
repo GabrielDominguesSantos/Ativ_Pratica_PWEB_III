@@ -28,13 +28,13 @@ Abra o navegador em:
 - [x] Edição de produtos
 - [x] Exclusão de produtos
 - [x] Cadastro de categorias (Desafio 1)
-- [ ] Produtos por categoria (Desafio 2)
+- [x] Produtos por categoria (Desafio 2)
 - [ ] Pesquisa de produtos (extra)
 
 ## Desafios
 
 - Desafio 1 — Categorias e relacionamento com produtos: Model `Categoria` (id, nome) com relação 1:N (`Categoria.hasMany(Produto)` / `Produto.belongsTo(Categoria)` via `categoriaId`, `SET NULL` ao excluir). CRUD de categorias em `/categorias` e `select` de categoria nos formulários de produto; listagem de produtos exibe a categoria (`include`).
-- Desafio 2 — Consulta de produtos por categoria: _(a implementar)_
+- Desafio 2 — Consulta de produtos por categoria: rota `GET /produtos/categoria/:id` que busca a categoria (`findByPk`) e filtra os produtos (`findAll({ where: { categoriaId } })` com `include`). Página `views/produtos/por-categoria.ejs` exibe só os produtos daquela categoria. Seleção disponível no filtro da página `/produtos` e no link "Ver produtos" de cada linha em `/categorias`; categoria inexistente redireciona para `/produtos`.
 
 ## Estrutura (MVC)
 
@@ -54,7 +54,8 @@ APIcadastro/
 │   ├── produtos/
 │   │   ├── index.ejs
 │   │   ├── novo.ejs
-│   │   └── editar.ejs
+│   │   ├── editar.ejs
+│   │   └── por-categoria.ejs   # Desafio 2 (filtro por categoria)
 │   └── categorias/
 │       ├── index.ejs
 │       ├── novo.ejs

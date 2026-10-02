@@ -17,9 +17,11 @@ router.get('/', async (req, res) => {
     include: { model: Categoria, as: 'Categoria' },
     order: [['id', 'ASC']]
   });
+  const categorias = await Categoria.findAll({ order: [['nome', 'ASC']] });
 
   res.render('produtos/index', {
-    produtos
+    produtos,
+    categorias
   });
 });
 
@@ -35,6 +37,27 @@ router.post('/', async (req, res) => {
   await Produto.create(normalizarCategoria(req.body));
 
   res.redirect('/produtos');
+});
+
+router.get('/categoria/:id', async (req, res) => {
+  const categoria = await Categoria.findByPk(req.params.id);
+
+  if (!categoria) {
+    return res.redirect('/produtos');
+  }
+
+  const produtos = await Produto.findAll({
+    where: { categoriaId: req.params.id },
+    include: { model: Categoria, as: 'Categoria' },
+    order: [['id', 'ASC']]
+  });
+  const categorias = await Categoria.findAll({ order: [['nome', 'ASC']] });
+
+  res.render('produtos/por-categoria', {
+    produtos,
+    categoria,
+    categorias
+  });
 });
 
 router.get('/:id/editar', async (req, res) => {
