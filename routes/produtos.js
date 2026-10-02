@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { Produto, Categoria } = require('../models');
+const { Op } = require('sequelize');
 
 function normalizarCategoria(body) {
   return {
@@ -57,6 +58,21 @@ router.get('/categoria/:id', async (req, res) => {
     produtos,
     categoria,
     categorias
+  });
+});
+
+router.get('/buscar', async (req, res) => {
+  const termo = (req.query.nome || '').trim();
+
+  const produtos = termo ? await Produto.findAll({
+    where: { nome: { [Op.like]: `%${termo}%` } },
+    include: { model: Categoria, as: 'Categoria' },
+    order: [['id', 'ASC']]
+  }) : [];
+
+  res.render('produtos/buscar', {
+    produtos,
+    termo
   });
 });
 

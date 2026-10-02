@@ -1,0 +1,64 @@
+<h1>Pesquisar produtos</h1>
+
+<a href="/produtos">Todos os produtos</a>
+
+<br><br>
+
+<form action="/produtos/buscar" method="GET">
+    <label>Nome:</label>
+    <input type="text" name="nome" value="<%= termo %>">
+
+    <button type="submit">
+        Pesquisar
+    </button>
+</form>
+
+<% if (termo) { %>
+
+    <h2>Resultados para "<%= termo %>"</h2>
+
+    <% if (produtos.length === 0) { %>
+        <p>Nenhum produto encontrado.</p>
+    <% } else { %>
+
+        <table border="1">
+            <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Categoria</th>
+                <th>Ações</th>
+            </tr>
+
+            <% produtos.forEach(p => { %>
+
+                <tr>
+                    <td><%= p.nome %></td>
+                    <td><%= p.preco %></td>
+                    <td><%= p.quantidade %></td>
+                    <td><%= p.Categoria ? p.Categoria.nome : 'Sem categoria' %></td>
+
+                    <td>
+                        <a href="/produtos/<%= p.id %>/editar">
+                            Editar
+                        </a>
+
+                        <form
+                            action="/produtos/<%= p.id %>/deletar"
+                            method="POST"
+                            style="display:inline"
+                        >
+                            <button type="submit">
+                                Excluir
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+            <% }) %>
+
+        </table>
+
+    <% } %>
+
+<% } %>
