@@ -19,6 +19,7 @@ Abra o navegador em:
 
 - http://localhost:3000 — página inicial
 - http://localhost:3000/produtos — CRUD de produtos
+- http://localhost:3000/categorias — CRUD de categorias
 
 ## Funcionalidades
 
@@ -26,16 +27,14 @@ Abra o navegador em:
 - [x] Listagem de produtos
 - [x] Edição de produtos
 - [x] Exclusão de produtos
-- [ ] Cadastro de categorias (Desafio 1)
+- [x] Cadastro de categorias (Desafio 1)
 - [ ] Produtos por categoria (Desafio 2)
 - [ ] Pesquisa de produtos (extra)
 
 ## Desafios
 
-_(preencher após implementar)_
-
-- Desafio 1 — Categorias e relacionamento com produtos:
-- Desafio 2 — Consulta de produtos por categoria:
+- Desafio 1 — Categorias e relacionamento com produtos: Model `Categoria` (id, nome) com relação 1:N (`Categoria.hasMany(Produto)` / `Produto.belongsTo(Categoria)` via `categoriaId`, `SET NULL` ao excluir). CRUD de categorias em `/categorias` e `select` de categoria nos formulários de produto; listagem de produtos exibe a categoria (`include`).
+- Desafio 2 — Consulta de produtos por categoria: _(a implementar)_
 
 ## Estrutura (MVC)
 
@@ -45,13 +44,18 @@ APIcadastro/
 ├── package.json
 ├── database.sqlite (gerado ao rodar)
 ├── bin/www
-├── models/index.js        # Model Produto + conexão Sequelize
+├── models/index.js        # Models Produto e Categoria + conexão Sequelize
 ├── routes/
 │   ├── index.js           # home
-│   └── produtos.js        # Controller/rotas do CRUD
+│   ├── produtos.js        # Controller/rotas do CRUD de produtos
+│   └── categorias.js      # Controller/rotas do CRUD de categorias
 ├── views/
 │   ├── index.ejs
-│   └── produtos/
+│   ├── produtos/
+│   │   ├── index.ejs
+│   │   ├── novo.ejs
+│   │   └── editar.ejs
+│   └── categorias/
 │       ├── index.ejs
 │       ├── novo.ejs
 │       └── editar.ejs

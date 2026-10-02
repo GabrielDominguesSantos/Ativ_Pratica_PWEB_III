@@ -1,36 +1,56 @@
 const express = require('express');
 const router = express.Router();
 
-const { Produto } = require('../models');
+const { Produto, Categoria } = require('../models');
+
+function normalizarCategoria(body) {
+  return {
+    nome: body.nome,
+    preco: body.preco,
+    quantidade: body.quantidade,
+    categoriaId: body.categoriaId === '' ? null : body.categoriaId
+  };
+}
 
 router.get('/', async (req, res) => {
-  const produtos = await Produto.findAll();
+  const produtos = await Produto.findAll({
+    include: { model: Categoria, as: 'Categoria' },
+    order: [['id', 'ASC']]
+  });
 
   res.render('produtos/index', {
     produtos
   });
 });
 
-router.get('/novo', (req, res) => {
-  res.render('produtos/novo');
+router.get('/novo', async (req, res) => {
+  const categorias = await Categoria.findAll({ order: [['nome', 'ASC']] });
+
+  res.render('produtos/novo', {
+    categorias
+  });
 });
 
 router.post('/', async (req, res) => {
-  await Produto.create(req.body);
+  await Produto.create(normalizarCategoria(req.body));
 
   res.redirect('/produtos');
 });
 
 router.get('/:id/editar', async (req, res) => {
-  const produto = await Produto.findByPk(req.params.id);
+  const produto = await Produto.findByPk(req.params.id, {
+    include: { model: Categoria, as: 'Categoria' }
+  });
+  const categorias = await Categoria.findAll({ order: [['nome', 'ASC']] });
 
   res.render('produtos/editar', {
-    produto
+    produto,
+    categorias
   });
 });
 
 router.post('/:id', async (req, res) => {
-  await Produto.update(req.body, {
+  await Produto.update(normalizarCategoria(req.body), {
     where: {
       id: req.params.id
     }
